@@ -1,60 +1,104 @@
-// ============ Dark Mode Toggle ============ //
-const modeToggle = document.getElementById("modeToggle");
+// 🌗 Dark / Light mode toggle + save preference
+const toggle = document.getElementById("modeToggle");
 const body = document.body;
 
-modeToggle.addEventListener("click", () => {
+// Load saved mode
+if (localStorage.getItem("theme") === "light") {
+  body.classList.add("light-mode");
+  toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+} else {
+  toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+}
+
+// Toggle mode
+toggle.addEventListener("click", () => {
   body.classList.toggle("light-mode");
-  const icon = modeToggle.querySelector("i");
+
   if (body.classList.contains("light-mode")) {
-    icon.classList.replace("fa-moon", "fa-sun");
+    toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    localStorage.setItem("theme", "light");
   } else {
-    icon.classList.replace("fa-sun", "fa-moon");
+    toggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    localStorage.setItem("theme", "dark");
   }
 });
 
-// ============ Leaflet Map ============ //
-const map = L.map("contactMap").setView([28.6139, 77.2090], 12);
+// 🗺️ Leaflet Map Initialization
+const map = L.map("contactMap").setView([28.6139, 77.209], 12);
+
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
 }).addTo(map);
 
-L.marker([28.6139, 77.2090])
+L.marker([28.6139, 77.209])
   .addTo(map)
   .bindPopup("<b>National Disaster Relief Hub</b><br>New Delhi, India.")
   .openPopup();
 
-// ============ Contact Form Submission ============ //
+// 📩 Contact Form Submission Logic
 const contactForm = document.getElementById("contactForm");
 const responseMsg = document.getElementById("responseMsg");
 
 contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = {
-    name: document.getElementById("name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    subject: document.getElementById("subject").value.trim(),
-    message: document.getElementById("message").value.trim(),
-  };
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const subject = document.getElementById("subject").value.trim();
+  const message = document.getElementById("message").value.trim();
 
+  // Validation
+  if (!name || !email || !subject || !message) {
+    showMessage("⚠️ Please fill out all fields.", "orange");
+    return;
+  }
+
+  // Send to backend
   try {
-    const res = await fetch("http://localhost:5000/api/contact", {
+    const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ name, email, subject, message }),
     });
 
     if (res.ok) {
-      responseMsg.textContent = "✅ Message sent successfully!";
-      responseMsg.style.color = "#00ff99";
+      showMessage("✅ Message sent successfully!", "limegreen");
       contactForm.reset();
     } else {
-      responseMsg.textContent = "❌ Failed to send message. Try again.";
-      responseMsg.style.color = "#ff4c4c";
+      throw new Error("Server Error");
     }
-  } catch (error) {
-    console.error("Error:", error);
-    responseMsg.textContent = "⚠️ Server error. Please try later.";
-    responseMsg.style.color = "#ffcc00";
+  } catch (err) {
+    showMessage("❌ Failed to send message. Try again later.", "red");
   }
+});
+
+// 🧩 Helper function for animated responses
+function showMessage(text, color) {
+  responseMsg.textContent = text;
+  responseMsg.style.color = color;
+  responseMsg.style.opacity = 1;
+  responseMsg.style.transition = "opacity 0.4s ease";
+
+  setTimeout(() => {
+    responseMsg.style.opacity = 0;
+  }, 4000);
+}
+
+// 💫 Smooth scroll reveal animation (optional polish)
+window.addEventListener("scroll", () => {
+  document.querySelectorAll(".contact-card").forEach((card) => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 50) {
+      card.style.opacity = 1;
+      card.style.transform = "translateY(0)";
+    }
+  });
+});
+
+// Initial hidden state for animation
+document.querySelectorAll(".contact-card").forEach((card) => {
+  card.style.opacity = 0;
+  card.style.transform = "translateY(30px)";
+  card.style.transition = "all 0.5s ease";
 });
