@@ -172,34 +172,34 @@ body {
 }
 
 /* Light Mode */
-body.light-mode {
+body.light {
   background: #f4f6fc;
   color: #111;
 }
 
-body.light-mode .navbar {
+body.light .navbar {
   background: linear-gradient(90deg, #dee6ff, #d4defc);
 }
 
-body.light-mode .nav-links a {
+body.light .nav-links a {
   color: #111;
 }
 
-body.light-mode .nav-links .active {
+body.light .nav-links .active {
   color: #0056ff;
 }
 
-body.light-mode .contact-card {
+body.light .contact-card {
   background: #ffffff;
   color: #000;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-body.light-mode .send-btn {
+body.light .send-btn {
   background: linear-gradient(90deg, #0066ff, #00bfff);
 }
 
-body.light-mode .footer {
+body.light .footer {
   background: #e9ecff;
   color: #333;
 }
@@ -213,7 +213,7 @@ body.light-mode .footer {
 }
 
 /* Light Mode override */
-body.light-mode .hero-section {
+body.light .hero-section {
   background: linear-gradient(135deg, #e6ecff, #f8f9ff);
   color: #0b0f26; /* text becomes dark navy/black in light mode */
 }

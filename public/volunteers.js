@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function addToPreview(v) {
     const wrapper = document.createElement("div");
     wrapper.innerHTML = cardHtml(v);
-    // append actual .col-md-4 node
     list.appendChild(wrapper.firstElementChild);
   }
 
@@ -85,23 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
     msg.textContent = "Registered locally. Attempting to save to server…";
 
     // ===== BACKEND HOOK (Node + SQL) =====
-    // Replace `/api/volunteers` with your actual endpoint.
+    // Fixed endpoint ✅
     try {
-      const res = await fetch("/api/volunteers", {
+      const res = await fetch("http://localhost:5500/api/volunteer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
 
-      if (!res.ok) throw new Error("Server responded with an error");
+      const responseData = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(responseData.details || responseData.error || `Server responded with ${res.status}`);
+      }
+      
       msg.className = "mt-3 small success";
       msg.textContent = "Successfully registered on server ✅";
       form.reset();
     } catch (err) {
-      // Still keep the preview; let user know server save failed
       msg.className = "mt-3 small error";
-      msg.textContent = "Saved locally, but server save failed. Check backend endpoint.";
-      console.error(err);
+      msg.textContent = `❌ Server error: ${err.message}`;
+      console.error("Full error:", err);
     }
   });
 });

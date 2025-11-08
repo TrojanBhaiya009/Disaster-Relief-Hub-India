@@ -4,14 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Load saved theme
   if (localStorage.getItem("theme") === "light") {
-    body.classList.add("light-mode");
+    body.classList.add("light");
     toggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
   }
 
   // Toggle theme
   toggle.addEventListener("click", () => {
-    body.classList.toggle("light-mode");
-    const isLight = body.classList.contains("light-mode");
+    body.classList.toggle("light");
+    const isLight = body.classList.contains("light");
     toggle.innerHTML = isLight
       ? '<i class="fa-solid fa-sun"></i>'
       : '<i class="fa-solid fa-moon"></i>';
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch("http://localhost:5500/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
