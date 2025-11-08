@@ -1,78 +1,165 @@
-/* ===== GLOBAL STYLES ===== */
+/* ===== GLOBAL RESET ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #ffffff;
+  line-height: 1.6;
   background: radial-gradient(circle at top left, #0b0b20 0%, #181633 40%, #101020 100%);
   background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
   transition: background 0.6s ease, color 0.6s ease;
 }
 
-/* LIGHT MODE */
+/* ===== LIGHT MODE ===== */
 body.light {
   background: linear-gradient(160deg, #f4f6ff 0%, #e3e8ff 50%, #ffffff 100%);
   color: #081f5c;
 }
 
-/* NAVBAR */
+/* ===== HEADINGS ===== */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(102,126,234,0.5);
+  font-weight: 700;
+}
+body.light h1, body.light h2, body.light h3, body.light h4, body.light h5, body.light h6 {
+  color: #000000 !important;
+  text-shadow: none;
+}
+
+/* ===== NAVBAR ===== */
 header {
   background: linear-gradient(90deg, #0b0b20, #1c1c5c);
   box-shadow: 0 0 25px rgba(80,100,200,0.4);
+  transition: background 0.6s ease, box-shadow 0.6s ease;
 }
-.nav-link { color: #bfbfbf !important; }
+.nav-link { color: #bfbfbf !important; transition: 0.3s; }
 .nav-link:hover, .nav-link.active { color: #ffffff !important; text-decoration: underline; }
-header .navbar-brand { color: #ffffff !important; font-weight: 700; }
-body.light header { background: linear-gradient(90deg, #dee3ff, #cfd6ff); }
+header .navbar-brand { color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; }
+body.light header {
+  background: linear-gradient(90deg, #dee3ff, #cfd6ff);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 body.light .nav-link { color: #081f5c !important; }
 body.light .nav-link.active { color: #2b3ac4 !important; }
 body.light header .navbar-brand { color: #000000 !important; }
 
-/* MAIN CONTAINER */
+/* ===== MAIN ===== */
 main {
   background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: 20px;
   box-shadow: 0 0 35px rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
   padding: 3rem 2rem;
   margin-top: 3rem;
+  transition: 0.4s ease;
 }
 body.light main {
   background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.05);
+  color: #081f5c;
   box-shadow: 0 0 25px rgba(0,0,0,0.1);
 }
 
-/* FORM */
-.form-select {
-  background-color: rgba(255,255,255,0.15);
-  color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.4);
-}
-body.light .form-select {
-  background-color: rgba(255,255,255,0.95);
-  color: #081f5c;
-  border: 1px solid rgba(0,0,0,0.2);
+/* ===== FILTER FORM ===== */
+#resourceForm {
+  border-radius: 18px;
+  padding: 2rem;
+  transition: all 0.3s ease-in-out;
 }
 
-/* BUTTON */
-.btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  border: none;
+/* DARK MODE STYLE */
+body:not(.light) #resourceForm {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+}
+body:not(.light) #resourceForm:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102,126,234,0.35);
+}
+
+/* LIGHT MODE STYLE */
+body.light #resourceForm {
+  background: linear-gradient(145deg, #f8faff, #e8edff);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 6px 20px rgba(102,126,234,0.15);
+}
+
+/* LABELS */
+#resourceForm .form-label {
   font-weight: 600;
-  border-radius: 8px;
+  color: #ffffff;
 }
-.btn:hover {
+body.light #resourceForm .form-label {
+  color: #000000;
+}
+
+/* SELECT BOXES */
+#resourceForm .form-select {
+  appearance: none;
+  border-radius: 10px;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+}
+
+/* DARK MODE SELECT */
+body:not(.light) #resourceForm .form-select {
+  background: rgba(40,40,80,0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+}
+body:not(.light) #resourceForm .form-select:hover {
+  border-color: #667eea;
+  box-shadow: 0 0 10px rgba(102,126,234,0.4);
+}
+
+/* LIGHT MODE SELECT */
+body.light #resourceForm .form-select {
+  background: #ffffff;
+  color: #081f5c;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 5px rgba(102,126,234,0.05);
+}
+body.light #resourceForm .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25);
+}
+
+/* DROPDOWN OPTIONS */
+#resourceForm .form-select option {
+  background: #1b1b33;
+  color: #ffffff;
+}
+body.light #resourceForm .form-select option {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* FILTER BUTTON */
+#resourceForm .btn {
+  width: 100%;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+#resourceForm .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+  box-shadow: 0 6px 25px rgba(102,126,234,0.4);
 }
-body.light .btn {
-  background: linear-gradient(135deg, #6b8aff 0%, #9db3ff 100%);
+body.light #resourceForm .btn {
+  background: linear-gradient(135deg, #6b8aff, #9db3ff);
   color: #081f5c;
 }
 
-/* RESOURCE CARDS */
+/* ===== RESOURCE CARDS ===== */
 #resourcesList .card {
   border-radius: 18px;
   overflow: hidden;
@@ -93,7 +180,7 @@ body.light #resourcesList .card {
   box-shadow: 0 6px 18px rgba(102,126,234,0.25);
 }
 
-/* MAP POPUP THEMES */
+/* ===== MAP POPUPS ===== */
 .leaflet-popup-content-wrapper {
   background: rgba(25,25,50,0.9);
   color: #ffffff;
@@ -106,7 +193,7 @@ body.light .leaflet-popup-content-wrapper {
   border: 1px solid rgba(0,0,0,0.1);
 }
 
-/* FOOTER */
+/* ===== FOOTER ===== */
 footer {
   background: #0b0b20 !important;
   color: #d8daff;
@@ -115,101 +202,23 @@ footer {
 body.light footer {
   background: #dfe3ff !important;
   color: #000000 !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
 }
 
-/* ANIMATIONS */
-.fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
-.visible { opacity: 1 !important; transform: translateY(0) !important; }
-/* ===== FIX: Heading Text Visibility ===== */
-h1, h2, h3 {
-  color: #ffffff !important;
-  text-shadow: 0 0 12px rgba(102,126,234,0.45);
-  font-weight: 700;
+/* ===== ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
 }
-body.light h1, body.light h2, body.light h3 {
-  color: #000000 !important;
-  text-shadow: none;
+.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
-/* ===== IMPROVED FILTER FORM (Glassmorphic Style) ===== */
-#resourceForm {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 18px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease-in-out;
-}
-#resourceForm:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.35);
-}
-
-/* Input + Select inside form */
-#resourceForm .form-select,
-#resourceForm .form-label {
-  color: #ffffff !important;
-  font-weight: 600;
-}
-#resourceForm .form-select {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  backdrop-filter: blur(10px);
-  font-weight: 500;
-}
-#resourceForm .form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.3);
-}
-
-/* Light mode variant */
-body.light #resourceForm {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-body.light #resourceForm .form-select {
-  background: #ffffff;
-  color: #081f5c;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-}
-body.light #resourceForm .form-label {
-  color: #000000 !important;
-}
-/* ===== FIX: Dark Mode Dropdown (Select Menu) ===== */
-#resourceForm select.form-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: rgba(40, 40, 80, 0.6);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 10px;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-#resourceForm select.form-select:hover {
-  border-color: #667eea;
-  box-shadow: 0 0 10px rgba(102,126,234,0.4);
-}
-
-/* keep dropdown dark on expand */
-#resourceForm select.form-select option {
-  background-color: #1b1b33;
-  color: #ffffff;
-}
-
-/* Light Mode Variant */
-body.light #resourceForm select.form-select {
-  background-color: #ffffff;
-  color: #081f5c;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-body.light #resourceForm select.form-select option {
-  background-color: #ffffff;
-  color: #000000;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  main { padding: 1.5rem; margin: 1rem; }
+  #resourceForm { padding: 1.5rem; }
+  #resourcesMap { height: 350px; }
 }
