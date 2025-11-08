@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resources | Disaster Relief Hub India</title>
+
+  <link rel="stylesheet" href="resources.css" />
+  <script src="resources.js" defer></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Bootstrap + Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar navbar-dark sticky-top">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <span class="navbar-brand mb-0 h1">🇮🇳 Disaster Relief Hub India</span>
+      <div class="d-flex align-items-center gap-3">
+        <nav class="navbar-nav flex-row gap-3">
+          <a class="nav-link" href="index.html">Dashboard</a>
+          <a class="nav-link" href="needs.html">Needs Map</a>
+          <a class="nav-link active" href="resources.html">Resources</a>
+          <a class="nav-link" href="volunteers.html">Volunteers</a>
+          <a class="nav-link" href="alerts.html">Alerts</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </nav>
+        <button id="modeToggle" class="btn btn-outline-light" title="Toggle Light/Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container-fluid my-5">
+    <h2 class="text-center mb-4 fade-up">Relief Resources & Supplies</h2>
+
+    <!-- Filter Form -->
+    <form id="resourceForm" class="card p-4 mb-4 fade-up">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label"><i class="fa-solid fa-box"></i> Resource Type:</label>
+          <select id="resourceType" class="form-select">
+            <option value="all">All Resources</option>
+            <option value="Medical">Medical Supplies</option>
+            <option value="Food">Food & Water</option>
+            <option value="Shelter">Temporary Shelter</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Generators">Generators</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label"><i class="fa-solid fa-location-dot"></i> Location:</label>
+          <select id="locationFilter" class="form-select">
+            <option value="all">All Locations</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Kolkata">Kolkata</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn mt-3">Filter Resources</button>
+    </form>
+
+    <!-- Resource Cards -->
+    <section id="resourcesList" class="row fade-up"></section>
+
+    <!-- Map -->
+    <div id="resourcesMap" class="card p-4 mt-4 fade-up" style="height:450px;border-radius:15px;"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-white text-center py-4 mt-5 fade-up">
+    <p>&copy; 2025 Disaster Relief Coordination Hub - India. All rights reserved.</p>
+    <p><small>Working towards a safer India</small></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

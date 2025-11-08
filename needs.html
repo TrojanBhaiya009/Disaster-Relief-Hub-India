@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="needs.css" />
   <script src="needs.js" defer></script>
 
-  <!-- Leaflet Library -->
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -30,14 +30,18 @@
         <a class="nav-link" href="alerts.html">Alerts</a>
         <a class="nav-link" href="contact.html">Contact</a>
       </nav>
+      <!-- Single working theme toggle -->
+      <button id="themeToggle" class="btn btn-sm btn-light ms-3">
+        <i class="fa-solid fa-moon"></i>
+      </button>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main class="container-fluid my-5">
-    <h2 class="mb-4 text-center section-heading">Critical Needs Assessment</h2>
+    <h2 class="text-center section-heading fade-up">Critical Needs Assessment</h2>
 
-    <!-- Filter Form -->
+    <!-- Filters -->
     <form id="needs-form" class="card p-4 mb-4 fade-up">
       <div class="row">
         <div class="col-md-6">
@@ -76,7 +80,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer bg-dark text-white text-center py-4 mt-5 fade-up">
+  <footer class="footer text-white text-center py-4 mt-5 fade-up">
     <p>&copy; 2025 Disaster Relief Coordination Hub - India. All rights reserved.</p>
     <p><small>Working towards a safer India</small></p>
   </footer>
