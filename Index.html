@@ -1,336 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disaster Relief Coordination Hub - India</title>
-    <link rel="stylesheet" href="./index.css">
-    <script src="Index.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Disaster Relief Hub India</title>
+
+  <link rel="stylesheet" href="index.css" />
+  <script src="index.js" defer></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Bootstrap + Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
 <body>
-    <header class="navbar navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">🇮🇳 Disaster Relief Hub India</span>
-            <nav class="navbar-nav ms-auto flex-row gap-3">
-                <a class="nav-link" href="#dashboard">Dashboard</a>
-                <a class="nav-link" href="#needs">Needs Map</a>
-                <a class="nav-link" href="#resources">Resources</a>
-                <a class="nav-link" href="#volunteers">Volunteers</a>
-                <a class="nav-link" href="#alerts">Alerts</a>
-                <a class="nav-link" href="#contact">Contact</a>
-            </nav>
+
+  <!-- NAVBAR -->
+  <header class="navbar navbar-dark sticky-top">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <span class="navbar-brand mb-0 h1">🇮🇳 Disaster Relief Hub India</span>
+      <div class="d-flex align-items-center gap-3">
+        <nav class="navbar-nav flex-row gap-3">
+          <a class="nav-link active" href="index.html">Dashboard</a>
+          <a class="nav-link" href="needs.html">Needs Map</a>
+          <a class="nav-link" href="resources.html">Resources</a>
+          <a class="nav-link" href="volunteers.html">Volunteers</a>
+          <a class="nav-link" href="alerts.html">Alerts</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </nav>
+
+        <!-- ===== Theme Toggle Button ===== -->
+        <button id="modeToggle" class="btn btn-outline-light" title="Toggle Light/Dark Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD -->
+  <main class="container-fluid my-5">
+    <h2 class="mb-4 text-center section-heading">Crisis Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="row text-center">
+      <div class="col-md-3"><div class="card p-3"><h4>Active Disasters</h4><h2>5</h2></div></div>
+      <div class="col-md-3"><div class="card p-3"><h4>People Affected</h4><h2>45,000</h2></div></div>
+      <div class="col-md-3"><div class="card p-3"><h4>Volunteers</h4><h2>1,250</h2></div></div>
+      <div class="col-md-3"><div class="card p-3"><h4>Resources</h4><h2>892</h2></div></div>
+    </div>
+
+    <!-- Active Disasters List -->
+    <div class="card p-4 mt-4 fade-up">
+      <h3>Active Disasters by Region</h3>
+      <ul class="list-group mt-3">
+        <li class="list-group-item">Kerala - Flood - Status: <strong>Active</strong></li>
+        <li class="list-group-item">Uttarakhand - Landslide - Status: <strong>Monitoring</strong></li>
+        <li class="list-group-item">Maharashtra - Heavy Rain - Status: <strong>Active</strong></li>
+        <li class="list-group-item">Gujarat - Cyclone - Status: <strong>Alert</strong></li>
+        <li class="list-group-item">Assam - Flash Flood - Status: <strong>Monitoring</strong></li>
+      </ul>
+    </div>
+
+    <!-- Map with Filters -->
+    <div class="card p-4 mt-4 fade-up">
+      <h3>Disaster Map Overview</h3>
+
+      <!-- Filters -->
+      <div class="row mt-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label"><i class="fa-solid fa-location-dot"></i> Select Region:</label>
+          <select id="regionFilter" class="form-select">
+            <option value="all">All India</option>
+            <option value="North">North India</option>
+            <option value="South">South India</option>
+            <option value="East">East India</option>
+            <option value="West">West India</option>
+            <option value="North-East">North-East India</option>
+          </select>
         </div>
-    </header>
+        <div class="col-md-6">
+          <label class="form-label"><i class="fa-solid fa-triangle-exclamation"></i> Select Status:</label>
+          <select id="statusFilter" class="form-select">
+            <option value="all">All</option>
+            <option value="Alert">Alert</option>
+            <option value="Active">Active</option>
+            <option value="Monitoring">Monitoring</option>
+          </select>
+        </div>
+      </div>
 
-    <main class="container-fluid my-5">
-        <section id="dashboard"></section>
-            <h2 class="mb-4">Crisis Dashboard</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card p-3">
-                        <h4>Active Disasters</h4>
-                        <h2>5</h2>
-                        <small>Across India</small>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card p-3">
-                        <h4>Affected People</h4>
-                        <h2>45,000</h2>
-                        <small>Need assistance</small>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card p-3">
-                        <h4>Volunteers Active</h4>
-                        <h2>1,250</h2>
-                        <small>On ground</small>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card p-3">
-                        <h4>Resources Deployed</h4>
-                        <h2>892</h2>
-                        <small>Across states</small>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-4 mt-4">
-                <h3>Active Disasters by Region</h3>
-                <ul class="list-group mt-3">
-                    <li class="list-group-item">Kerala - Flood - Status: <strong>Active</strong></li>
-                    <li class="list-group-item">Uttarakhand - Landslide - Status: <strong>Monitoring</strong></li>
-                    <li class="list-group-item">Maharashtra - Heavy Rain - Status: <strong>Active</strong></li>
-                    <li class="list-group-item">Gujarat - Cyclone - Status: <strong>Alert</strong></li>
-                    <li class="list-group-item">Assam - Flash Flood - Status: <strong>Monitoring</strong></li>
-                </ul>
-            </div>
-        </section>
+      <div id="disasterMap" style="height:450px;border-radius:15px;"></div>
+    </div>
 
-        <section id="needs"></section>
-            <h2 class="mb-4">Critical Needs Assessment</h2>
-            <form class="card p-4 mb-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Filter by State:</label>
-                        <select class="form-select">
-                            <option>All States</option>
-                            <option>Kerala</option>
-                            <option>Tamil Nadu</option>
-                            <option>Uttarakhand</option>
-                            <option>Maharashtra</option>
-                            <option>Gujarat</option>
-                            <option>Assam</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Filter by Type:</label>
-                        <select class="form-select">
-                            <option>All Types</option>
-                            <option>Medical</option>
-                            <option>Food & Water</option>
-                            <option>Shelter</option>
-                            <option>Transportation</option>
-                            <option>Emergency Supplies</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Search</button>
-            </form>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card p-4 mb-3">
-                        <h4>Medical Needs</h4>
-                        <ul>
-                            <li>5000 First Aid Kits</li>
-                            <li>2000 Water Purification Tablets</li>
-                            <li>1500 Blankets</li>
-                            <li>Emergency Medicines</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card p-4 mb-3">
-                        <h4>Food & Water Needs</h4>
-                        <ul>
-                            <li>10 Tons of Rice & Grains</li>
-                            <li>5 Tons of Vegetables</li>
-                            <li>50,000 Liters of Drinking Water</li>
-                            <li>Cooking Utensils</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div id="needs-map" class="card p-4"><p><strong>Map view of critical needs</strong> - Integration with Google Maps API pending</p></div>
-        </section>
+    <!-- Quick Tips Section -->
+    <div class="card p-4 mt-5 fade-up">
+      <h3><i class="fa-solid fa-lightbulb"></i> Quick Tips for Disaster Safety</h3>
+      <div class="row mt-4 g-3">
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-kit-medical fa-2x"></i>
+            <h5>Keep an Emergency Kit</h5>
+            <p>Include first aid, medicines, flashlight, batteries, food, and important documents.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-tower-broadcast fa-2x"></i>
+            <h5>Follow Official Alerts</h5>
+            <p>Use government sources like NDMA, IMD, and local authorities for verified information.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-person-shelter fa-2x"></i>
+            <h5>Know Your Shelter</h5>
+            <p>Identify nearby safe zones and evacuation centers before disaster strikes.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-droplet fa-2x"></i>
+            <h5>Store Clean Water</h5>
+            <p>Maintain 3 days’ worth of drinking water for each family member during emergencies.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-people-roof fa-2x"></i>
+            <h5>Help Your Neighbours</h5>
+            <p>Check on elderly people, children, and those needing special assistance.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tip-box p-3">
+            <i class="fa-solid fa-phone-volume fa-2x"></i>
+            <h5>Emergency Contacts</h5>
+            <p>Save helpline numbers like 108 (medical), 100 (police), and local disaster hotlines.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        <section id="resources"></section>
-            <h2 class="mb-4">Available Resources</h2>
-            <form class="card p-4 mb-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Resource Type:</label>
-                        <select class="form-select">
-                            <option>All Resources</option>
-                            <option>Medical Supplies</option>
-                            <option>Food & Water</option>
-                            <option>Temporary Shelter</option>
-                            <option>Vehicles</option>
-                            <option>Generators</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Location:</label>
-                        <select class="form-select">
-                            <option>All Locations</option>
-                            <option>North India</option>
-                            <option>South India</option>
-                            <option>East India</option>
-                            <option>West India</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Filter</button>
-            </form>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card p-3 mb-3">
-                        <h5>Medical Supplies Warehouse</h5>
-                        <p><strong>Location:</strong> Delhi</p>
-                        <p><strong>Available:</strong> 500 First Aid Kits, 200 Blankets</p>
-                        <p><strong>Contact:</strong> +91-11-XXXX-XXXX</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card p-3 mb-3">
-                        <h5>Food Distribution Center</h5>
-                        <p><strong>Location:</strong> Mumbai</p>
-                        <p><strong>Available:</strong> 5 Tons Rice, 10 Tankers Water</p>
-                        <p><strong>Contact:</strong> +91-22-XXXX-XXXX</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card p-3 mb-3">
-                        <h5>Vehicles & Transport</h5>
-                        <p><strong>Location:</strong> Bangalore</p>
-                        <p><strong>Available:</strong> 25 Trucks, 10 Ambulances</p>
-                        <p><strong>Contact:</strong> +91-80-XXXX-XXXX</p>
-                    </div>
-                </div>
-            </div>
-            <div id="resources-map" class="card p-4"><p><strong>Map view of available resources</strong> - Integration with Google Maps API pending</p></div>
-        </section>
+  <!-- FOOTER -->
+  <footer class="footer bg-dark text-white text-center py-4 mt-5 fade-up">
+    <p>&copy; 2025 Disaster Relief Coordination Hub - India. All rights reserved.</p>
+    <p><small>Working towards a safer India</small></p>
+  </footer>
 
-        <section id="volunteers"></section>
-            <h2 class="mb-4">Volunteer Coordination</h2>
-            <form class="card p-4 mb-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="form-label">Name:</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Email:</label>
-                        <input type="email" class="form-control" required>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Phone:</label>
-                        <input type="tel" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">State:</label>
-                        <select class="form-select" required>
-                            <option>Select State</option>
-                            <option>Kerala</option>
-                            <option>Tamil Nadu</option>
-                            <option>Delhi</option>
-                            <option>Maharashtra</option>
-                            <option>Gujarat</option>
-                            <option>Assam</option>
-                        </select>
-                    </div>
-                </div>
-                <label class="form-label mt-3">Skills:</label>
-                <textarea class="form-control" placeholder="e.g., Medical, Logistics, Communication, Rescue, etc."></textarea>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Availability Start Date:</label>
-                        <input type="date" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Availability End Date:</label>
-                        <input type="date" class="form-control" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Register as Volunteer</button>
-            </form>
-            <h3>Active Volunteers</h3>
-            <table class="table table-striped mt-3">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Skills</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                        <th>Contact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Rajesh Kumar</td>
-                        <td>Medical, First Aid</td>
-                        <td>Kerala</td>
-                        <td>Active</td>
-                        <td>+91-98765-XXXX</td>
-                    </tr>
-                    <tr>
-                        <td>Priya Singh</td>
-                        <td>Logistics, Communication</td>
-                        <td>Delhi</td>
-                        <td>Active</td>
-                        <td>+91-99876-XXXX</td>
-                    </tr>
-                    <tr>
-                        <td>Arun Patel</td>
-                        <td>Rescue, Heavy Equipment</td>
-                        <td>Gujarat</td>
-                        <td>Active</td>
-                        <td>+91-97654-XXXX</td>
-                    </tr>
-                    <tr>
-                        <td>Neha Sharma</td>
-                        <td>Medical, Counseling</td>
-                        <td>Maharashtra</td>
-                        <td>On Leave</td>
-                        <td>+91-98543-XXXX</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section id="alerts">
-            <h2 class="mb-4">Real-time Alerts</h2>
-            <article class="card p-4 mb-3"></article>
-                <h3>🚨 Critical: Flash Flood Alert - Assam</h3>
-                <p>Heavy rainfall expected in next 24 hours. Immediate evacuation from low-lying areas recommended.</p>
-                <time>2024-01-15 10:30 AM IST</time>
-            </article>
-            <article class="card p-4 mb-3"></article>
-                <h3>⚠️ Warning: Medical Supplies Running Low - Kerala</h3>
-                <p>Urgent need for additional medical supplies and first aid kits at relief camps.</p>
-                <time>2024-01-15 09:15 AM IST</time>
-            </article>
-            <article class="card p-4 mb-3"></article>
-                <h3>⚠️ Update: Additional Volunteers Needed - Maharashtra</h3>
-                <p>200 additional volunteers needed for relief distribution in flood-affected areas.</p>
-                <time>2024-01-15 08:45 AM IST</time>
-            </article>
-            <article class="card p-4 mb-3"></article>
-                <h3>✅ Update: Relief Operations Progressing - Uttarakhand</h3>
-                <p>5000 people safely evacuated. All camps operational with adequate supplies.</p>
-                <time>2024-01-15 07:30 AM IST</time>
-            </article>
-        </section>
-
-        <section id="contact"></section>
-            <h2 class="mb-4">Contact & Emergency Numbers</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card p-4 mb-3">
-                        <h4>Emergency Hotlines</h4>
-                        <ul>
-                            <li><strong>National Disaster Management Authority:</strong> 1078</li>
-                            <li><strong>Police:</strong> 100</li>
-                            <li><strong>Ambulance:</strong> 102</li>
-                            <li><strong>Fire:</strong> 101</li>
-                            <li><strong>Disaster Relief Hub:</strong> +91-11-XXXX-XXXX</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card p-4 mb-3">
-                        <h4>Contact Form</h4>
-                        <form>
-                            <input type="text" class="form-control mb-2" placeholder="Your Name" required>
-                            <input type="email" class="form-control mb-2" placeholder="Your Email" required>
-                            <textarea class="form-control mb-2" placeholder="Message" rows="4"></textarea>
-                            <button type="submit" class="btn btn-primary">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-dark text-white text-center py-4 mt-5">
-        <p>&copy; 2024 Disaster Relief Coordination Hub - India. All rights reserved.</p>
-        <p><small>Working towards a safer India</small></p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
