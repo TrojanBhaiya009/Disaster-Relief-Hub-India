@@ -1,0 +1,90 @@
+/* Base */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Navbar */
+header {
+  background: linear-gradient(90deg, #0b0b20, #1c1c5c);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+.nav-link { color: #bfbfbf !important; transition: 0.3s; }
+.nav-link:hover, .nav-link.active { color: #fff !important; text-decoration: underline; }
+
+/* Main */
+main {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 3rem;
+}
+
+/* Map */
+#map {
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#map:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+}
+
+/* Cards */
+.card {
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+#needs-list .card h5 {
+  font-weight: 700;
+  color: #ffd369;
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+.fade-up, .fade-left, .fade-right {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-left { transform: translateX(-40px); }
+.fade-right { transform: translateX(40px); }
+.visible { opacity: 1 !important; transform: translate(0, 0) !important; }
+
+/* Footer */
+footer {
+  background: #0b0b20 !important;
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
