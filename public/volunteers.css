@@ -1,0 +1,176 @@
+/* ===== RESET + BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  line-height: 1.6;
+  background: radial-gradient(circle at top left, #0b0b20 0%, #181633 40%, #101020 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+/* LIGHT MODE */
+body.light {
+  background: linear-gradient(160deg, #f4f6ff 0%, #e3e8ff 50%, #ffffff 100%);
+  color: #081f5c;
+}
+
+/* HEADINGS */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(102,126,234,0.45);
+  font-weight: 700;
+}
+body.light h1, body.light h2, body.light h3, body.light h4, body.light h5, body.light h6 {
+  color: #000000 !important;
+  text-shadow: none;
+}
+
+/* NAVBAR */
+header {
+  background: linear-gradient(90deg, #0b0b20, #1c1c5c);
+  box-shadow: 0 0 25px rgba(80,100,200,0.4);
+}
+.nav-link { color: #bfbfbf !important; transition: 0.3s; }
+.nav-link:hover, .nav-link.active { color: #ffffff !important; text-decoration: underline; }
+header .navbar-brand { color: #ffffff !important; font-weight: 700; letter-spacing: 0.5px; }
+body.light header { background: linear-gradient(90deg, #dee3ff, #cfd6ff); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+body.light .nav-link { color: #081f5c !important; }
+body.light .nav-link.active { color: #2b3ac4 !important; }
+body.light header .navbar-brand { color: #000000 !important; }
+
+/* MAIN CONTAINER */
+main {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  box-shadow: 0 0 35px rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  padding: 3rem 2rem;
+  margin-top: 3rem;
+  transition: 0.4s ease;
+}
+body.light main {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #081f5c;
+  box-shadow: 0 0 25px rgba(0,0,0,0.1);
+}
+
+/* FORM (Glassmorphic) */
+#volunteerForm {
+  border-radius: 18px;
+  padding: 2rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+  transition: all 0.3s ease-in-out;
+}
+#volunteerForm:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102,126,234,0.35);
+}
+body.light #volunteerForm {
+  background: linear-gradient(145deg, #f8faff, #e8edff);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 25px rgba(102,126,234,0.15);
+}
+
+/* Inputs */
+#volunteerForm .form-control,
+#volunteerForm .form-select {
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(40,40,80,0.65);
+  color: #ffffff;
+}
+#volunteerForm .form-control::placeholder { color: rgba(255,255,255,0.7); }
+#volunteerForm .form-control:focus,
+#volunteerForm .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.35);
+  outline: none;
+}
+body.light #volunteerForm .form-control,
+body.light #volunteerForm .form-select {
+  background: #ffffff;
+  color: #081f5c;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Checkbox text color fix */
+#volunteerForm label { color: #ffffff; }
+body.light #volunteerForm label { color: #081f5c; }
+
+/* Button */
+#volunteerForm .btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+}
+#volunteerForm .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+}
+body.light #volunteerForm .btn {
+  background: linear-gradient(135deg, #6b8aff, #9db3ff);
+  color: #081f5c;
+}
+
+/* Success/Error message */
+#formMsg {
+  font-weight: 600;
+}
+#formMsg.success { color: #2ed573; }
+#formMsg.error { color: #ff6b6b; }
+
+/* PREVIEW CARDS */
+#volunteerList .card {
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.12));
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f0f0ff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+#volunteerList .card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+}
+body.light #volunteerList .card {
+  background: linear-gradient(135deg, rgba(170,185,255,0.25), rgba(220,230,255,0.25));
+  border: 1px solid rgba(0,0,0,0.08);
+  color: #081f5c;
+  box-shadow: 0 6px 18px rgba(102,126,234,0.25);
+}
+
+/* FOOTER */
+footer {
+  background: #0b0b20 !important;
+  color: #d8daff;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+body.light footer {
+  background: #dfe3ff !important;
+  color: #000000 !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ANIMATIONS */
+.fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
+.visible { opacity: 1 !important; transform: translateY(0) !important; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  main { padding: 1.5rem; margin: 1rem; }
+  #volunteerForm { padding: 1.5rem; }
+}
