@@ -1,179 +1,290 @@
-/* Reset & Base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ===== GLOBAL RESET ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-html {
-  scroll-behavior: smooth;
-}
-
+/* ===== BODY ===== */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
   line-height: 1.6;
-  color: #fff;
-  /* 💫 New gradient background */
-  background: linear-gradient(135deg, #16193b 0%, #1d2671 50%, #2b32b2 100%);
+  background: linear-gradient(160deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
   background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.6s ease, color 0.6s ease;
 }
 
-/* Navbar */
-header {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.nav-link {
-  color: #bfbfbf !important;
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  color: #fff !important;
-  text-decoration: underline;
-}
-
-/* Section heading */
-.section-heading {
-  color: #eaeaea;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-/* Main Area */
-main {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 3rem 2rem;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  position: relative;
-  z-index: 1;
-}
-
-/* Add soft glow behind main content */
-main::before {
+/* Subtle texture overlay */
+body::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 60%;
-  height: 100%;
-  transform: translateX(-50%);
-  background: radial-gradient(circle at center, rgba(102, 126, 234, 0.3), transparent 70%);
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.05), transparent 70%),
+              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 70%);
   z-index: -1;
 }
 
-/* Cards */
-.card {
-  border-radius: 15px;
-  transition: all 0.3s ease;
+/* ===== HEADING COLORS (Fixed for Better Contrast) ===== */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important; /* default dark mode text */
+  font-weight: 700;
+  transition: color 0.4s ease;
 }
 
-.stat-card {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+/* Light mode headings — pure black for contrast */
+body.light h1,
+body.light h2,
+body.light h3,
+body.light h4,
+body.light h5,
+body.light h6 {
+  color: #000000 !important;
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.25);
-}
 
-/* List clarity */
-.list-group-item {
-  background: #fff;
-  color: #111;
-  font-weight: 500;
-  border: none;
-  margin-bottom: 0.3rem;
-  border-radius: 8px;
-}
-
-/* Footer */
-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  background: #0b0b20 !important;
-  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  main {
-    margin: 1rem;
-    padding: 2rem;
-  }
-  header .navbar-brand {
-    font-size: 1.2rem;
-  }
-}
-/* ===== Scroll Animations ===== */
-.fade-up, .fade-left, .fade-right {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-left { transform: translateX(-40px); }
-.fade-right { transform: translateX(40px); }
-
-.visible {
-  opacity: 1 !important;
-  transform: translate(0, 0) !important;
-}
-
-/* ===== Hover Enhancements ===== */
-.stat-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
-  transform: scale(0);
-  transition: transform 0.6s ease;
-}
-
-.stat-card:hover::before {
-  transform: scale(1);
-}
-
-/* ===== Navbar Glow ===== */
+/* ===== NAVBAR ===== */
 header {
   background: linear-gradient(90deg, #0b0b20, #1c1c5c);
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 0 20px rgba(102,126,234,0.4);
+  transition: background 0.6s ease, box-shadow 0.6s ease;
+}
+.nav-link {
+  color: #bfbfbf !important;
+  transition: 0.3s;
+}
+.nav-link:hover, .nav-link.active {
+  color: #ffffff !important;
+  text-decoration: underline;
 }
 
-/* ===== Section Fade Animation ===== */
-.section-heading {
-  animation: fadeInDown 1s ease forwards;
-  opacity: 0;
+/* ===== MAIN CONTAINER ===== */
+main {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.4), 0 0 25px rgba(102, 126, 234, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 3rem 2rem;
+  margin-top: 3rem;
+  transition: 0.4s ease;
+}
+main:hover {
+  box-shadow: 0 0 50px rgba(102, 126, 234, 0.4), 0 0 30px rgba(255, 255, 255, 0.1);
+}
+/* ===== DARK MODE IMPROVED (Balanced Night Look) ===== */
+body:not(.light) {
+  background: radial-gradient(circle at top left, #0b0b20 0%, #181633 40%, #101020 100%);
+  color: #e6e6f0;
 }
 
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
+body:not(.light) header {
+  background: linear-gradient(90deg, #0c0c1f, #1c1c5c);
+  box-shadow: 0 0 25px rgba(80,100,200,0.4);
 }
 
-/* ===== Button Pulse Effect ===== */
+body:not(.light) main {
+  background: rgba(25, 25, 50, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #dcdcf5;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.6);
+}
+
+body:not(.light) .card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #dfe3ff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+body:not(.light) .card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(102,126,234,0.25);
+}
+
+body:not(.light) .tip-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f0f1ff;
+}
+body:not(.light) .tip-box:hover {
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 20px rgba(102,126,234,0.25);
+}
+
+body:not(.light) footer {
+  background: #0c0c1f !important;
+  color: #d8daff;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Optional: reduce white filter in map popup */
+body:not(.light) .leaflet-popup-content-wrapper {
+  background: rgba(25, 25, 50, 0.9);
+  color: #f2f2ff;
+}
+
+/* ===== DASHBOARD CARDS ===== */
+.card {
+  border-radius: 15px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.card:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 25px rgba(255,255,255,0.25);
+}
+
+/* ===== MAP ===== */
+#disasterMap {
+  height: 450px;
+  border-radius: 15px;
+  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#disasterMap:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 30px rgba(102,126,234,0.7);
+}
+
+/* ===== FILTERS ===== */
+.form-select {
+  background-color: rgba(255,255,255,0.15);
+  color: #ffffff;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+}
+.form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.3);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
 .btn:hover {
-  animation: pulse 0.8s ease;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+/* ===== QUICK TIPS ===== */
+.tip-box {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.tip-box i { color: #ffd369; margin-bottom: 10px; }
+.tip-box:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(255,255,255,0.15);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #0b0b20 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light {
+  background: linear-gradient(160deg, #f4f6ff 0%, #e3e8ff 50%, #ffffff 100%);
+  color: #081f5c;
+}
+body.light header {
+  background: linear-gradient(90deg, #dee3ff, #cfd6ff);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+body.light .nav-link { color: #081f5c !important; }
+body.light .nav-link.active { color: #2b3ac4 !important; }
+body.light main {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #081f5c;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+}
+body.light .card {
+  background: rgba(255,255,255,0.95);
+  color: #081f5c;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+body.light .card:hover {
+  background: #ffffff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+body.light .form-select {
+  background-color: rgba(255,255,255,0.95);
+  color: #081f5c;
+  border: 1px solid rgba(0,0,0,0.2);
+}
+body.light .btn {
+  background: linear-gradient(135deg, #6b8aff 0%, #9db3ff 100%);
+  color: #081f5c;
+}
+body.light #disasterMap {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+body.light footer {
+  background: #e9ecff !important;
+  color: #081f5c;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  main{padding:1.5rem;margin:1rem;}
+  #disasterMap{height:350px;}
+}
+/* ===== LIGHT MODE TEXT FIX FOR QUICK TIPS ===== */
+body.light .tip-box h5,
+body.light .tip-box p {
+  color: #000000 !important; /* pure black text in light mode */
+}
+
+body.light .tip-box i {
+  color: #d4aa00 !important; /* softer golden icon tone for balance */
+}
+/* ===== LIGHT MODE VISIBILITY FIX (Navbar + Footer + Branding) ===== */
+body.light header .navbar-brand {
+  color: #000000 !important; /* make brand text black in light mode */
+}
+
+body.light footer {
+  background: #dfe3ff !important; /* slightly darker than bg for contrast */
+  color: #000000 !important; /* black footer text */
+}
+
+body.light footer p,
+body.light footer small {
+  color: #000000 !important;
+}
+
+/* Navbar shadow for separation */
+body.light header {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Quick Tips Title fix */
+body.light h3.section-heading,
+body.light h3,
+body.light h2,
+body.light h1 {
+  color: #000000 !important;
 }
