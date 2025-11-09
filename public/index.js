@@ -89,38 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===== CHART INITIALIZATION =====
 const ctx = document.getElementById("disasterChart");
+let disasterChart;
+
 if (ctx) {
-  let chartType = "line";
-  let chartData = getChartData("week");
-
-  let disasterChart = new Chart(ctx, {
-    type: chartType,
-    data: chartData,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: true, labels: { color: "#ffffff" } },
-        title: {
-          display: true,
-          text: "Disaster Trends",
-          color: "#ffffff",
-          font: { size: 18 }
-        }
-      },
-      scales: {
-        x: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } },
-        y: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } }
-      }
-    }
-  });
-
   const graphFilter = document.getElementById("graphFilter");
   const chartTypeSelect = document.getElementById("chartType");
 
-  graphFilter.addEventListener("change", () => updateChart());
-  chartTypeSelect.addEventListener("change", () => updateChart());
-
-  function getChartData(filter) {
+  const getChartData = (filter) => {
     if (filter === "week") {
       return {
         labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -158,39 +133,50 @@ if (ctx) {
         }]
       };
     }
-  }
+  };
 
-  function updateChart() {
-    const filter = graphFilter.value;
-    const type = chartTypeSelect.value;
-    disasterChart.destroy();
+  const renderChart = (type, filter) => {
+    const isLight = document.body.classList.contains("light");
+    const textColor = isLight ? "#000" : "#fff";
+    const gridColor = isLight ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)";
+    const bgColor = isLight ? "#ffffff" : "#181633";
+
+    if (disasterChart) disasterChart.destroy();
+
     disasterChart = new Chart(ctx, {
       type: type,
       data: getChartData(filter),
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          legend: { display: true, labels: { color: document.body.classList.contains("light") ? "#000" : "#fff" } },
+          legend: { display: true, labels: { color: textColor } },
           title: {
             display: true,
             text: "Disaster Trends",
-            color: document.body.classList.contains("light") ? "#000" : "#fff",
+            color: textColor,
             font: { size: 18 }
           }
         },
         scales: {
-          x: {
-            ticks: { color: document.body.classList.contains("light") ? "#000" : "#fff" },
-            grid: { color: "rgba(255,255,255,0.1)" }
-          },
-          y: {
-            ticks: { color: document.body.classList.contains("light") ? "#000" : "#fff" },
-            grid: { color: "rgba(255,255,255,0.1)" }
-          }
-        }
+          x: { ticks: { color: textColor }, grid: { color: gridColor } },
+          y: { ticks: { color: textColor }, grid: { color: gridColor } }
+        },
+        backgroundColor: bgColor
       }
     });
-  }
+  };
+
+  // Initialize first chart
+  renderChart("line", "week");
+
+  // Filter change listeners
+  graphFilter.addEventListener("change", () => {
+    renderChart(chartTypeSelect.value, graphFilter.value);
+  });
+  chartTypeSelect.addEventListener("change", () => {
+    renderChart(chartTypeSelect.value, graphFilter.value);
+  });
 }
 
 // ===== THEME TOGGLE =====
@@ -206,5 +192,19 @@ if (modeToggle) {
       icon.classList.remove("fa-sun");
       icon.classList.add("fa-moon");
     }
+
+    // Re-render chart on theme change
+    setTimeout(() => {
+      const graphFilter = document.getElementById("graphFilter");
+      const chartTypeSelect = document.getElementById("chartType");
+      if (ctx && typeof Chart !== "undefined") {
+        const filter = graphFilter?.value || "week";
+        const type = chartTypeSelect?.value || "line";
+        if (typeof renderChart === "function") {
+          const event = new Event("change");
+          graphFilter.dispatchEvent(event);
+        }
+      }
+    }, 300);
   });
 }

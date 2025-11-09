@@ -1,5 +1,5 @@
 // ================================
-// Disaster Relief Hub - Backend (Vercel Ready)
+// 🚀 Disaster Relief Hub Backend (Dual Mode: Local + Vercel)
 // ================================
 
 const express = require("express");
@@ -13,96 +13,73 @@ dotenv.config();
 const app = express();
 
 // ================================
-// Middleware Setup
+// 🧩 MIDDLEWARE
 // ================================
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
   cors({
     origin: ["http://localhost:5500", "https://hack-ops-repo-lkbq.vercel.app"],
     methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public"))); // serve frontend files
 
 // ================================
-// Database Connection
+// 💾 DATABASE CONFIG (Auto Switch)
 // ================================
-const dbConfig = {
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "Nayan",
-  password: process.env.DB_PASS || "Iamabadman#009",
-  database: process.env.DB_NAME || "reliefhub",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-};
+const isVercel = process.env.VERCEL === "1";
 
-const db = mysql.createPool(dbConfig);
+const dbConfig = isVercel
+  ? {
+      host: process.env.DB_HOST || "sql.freedb.tech",
+      user: process.env.DB_USER || "freedb_nayan",
+      password: process.env.DB_PASS || "password123",
+      database: process.env.DB_NAME || "freedb_reliefhub",
+    }
+  : {
+      host: "localhost",
+      user: "root", // ya "Nayan" if your local user is that
+      password: "Iamabadman#009",
+      database: "reliefhub",
+    };
 
-// ================================
-// Initialize Database + Tables
-// ================================
-async function initializeDatabase() {
+let db;
+
+async function initDB() {
   try {
-    const conn = await db.getConnection();
+    db = mysql.createPool({
+      ...dbConfig,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    });
 
-    await conn.query(`CREATE DATABASE IF NOT EXISTS reliefhub`);
-    await conn.query(`USE reliefhub`);
-
-    await conn.query(`
-      CREATE TABLE IF NOT EXISTS volunteers (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        phone VARCHAR(50) NOT NULL,
-        state VARCHAR(100),
-        city VARCHAR(100),
-        skills VARCHAR(255),
-        availability VARCHAR(100),
-        notes TEXT,
-        consent BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    await conn.query(`
-      CREATE TABLE IF NOT EXISTS contact_messages (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) NOT NULL,
-        subject VARCHAR(255),
-        message TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-
-    conn.release();
-    console.log("✅ Database initialized and verified");
-  } catch (err) {
-    console.error("❌ Database initialization failed:", err.message);
-  }
-}
-initializeDatabase();
-
-// ================================
-// Health Check Route
-// ================================
-app.get("/api/health", async (req, res) => {
-  try {
     const conn = await db.getConnection();
     await conn.ping();
     conn.release();
-    res.json({ status: "✅ API and Database Connected", time: new Date() });
+    console.log("✅ Database connected successfully");
   } catch (err) {
-    res
-      .status(500)
-      .json({ status: "❌ DB Connection Error", error: err.message });
+    console.error("❌ DB Connection Failed:", err.message);
+  }
+}
+initDB();
+
+// ================================
+// 🩺 HEALTH CHECK
+// ================================
+app.get("/api/health", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT NOW() AS time");
+    res.json({ status: "✅ API & DB Connected", time: rows[0].time });
+  } catch (err) {
+    res.status(500).json({ status: "❌ DB Error", error: err.message });
   }
 });
 
 // ================================
-// Volunteer Registration
+// 👥 VOLUNTEER REGISTRATION
 // ================================
 app.post("/api/volunteer", async (req, res) => {
   const {
@@ -116,8 +93,6 @@ app.post("/api/volunteer", async (req, res) => {
     notes,
     consent,
   } = req.body;
-
-  console.log("📩 Received volunteer data:", req.body);
 
   if (!fullName || !email || !phone) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -141,11 +116,8 @@ app.post("/api/volunteer", async (req, res) => {
       notes || "",
       consent ? 1 : 0,
     ]);
-
-    console.log(`✅ Volunteer inserted with ID: ${result.insertId}`);
-    res.json({ message: "Volunteer registered successfully!" });
+    res.json({ message: "✅ Volunteer registered successfully!", id: result.insertId });
   } catch (err) {
-    console.error("❌ Database Insert Error:", err.sqlMessage || err.message);
     res.status(500).json({
       error: "Database insert failed",
       details: err.sqlMessage || err.message,
@@ -154,7 +126,7 @@ app.post("/api/volunteer", async (req, res) => {
 });
 
 // ================================
-// Contact Form Endpoint
+// 💬 CONTACT FORM
 // ================================
 app.post("/api/contact", async (req, res) => {
   const { name, email, subject, message } = req.body;
@@ -170,12 +142,8 @@ app.post("/api/contact", async (req, res) => {
 
   try {
     const [result] = await db.query(sql, [name, email, subject, message]);
-    console.log(
-      `📩 Contact message received from ${name} (ID: ${result.insertId})`
-    );
-    res.json({ message: "Message stored successfully!" });
+    res.json({ message: "✅ Message stored successfully!", id: result.insertId });
   } catch (err) {
-    console.error("❌ Contact Insert Error:", err.sqlMessage || err.message);
     res.status(500).json({
       error: "Database insert failed",
       details: err.sqlMessage || err.message,
@@ -184,47 +152,26 @@ app.post("/api/contact", async (req, res) => {
 });
 
 // ================================
-// Routes for Frontend Pages
+// 🌐 FRONTEND ROUTES
 // ================================
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Redirect `/volunteer` and `/volunteers` correctly
 app.get(["/volunteer", "/volunteers"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "volunteers.html"));
 });
 
-// ================================
-// Serve All Frontend Pages (Wildcard for Vercel)
-// ================================
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ================================
-// 404 & Error Handlers
-// ================================
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found", path: req.path });
-});
-
-app.use((err, req, res, next) => {
-  console.error("❌ Unhandled Error:", err);
-  res
-    .status(500)
-    .json({ error: "Internal server error", message: err.message });
-});
-
-// ================================
-// Start Server (Local)
+// 🚀 SERVER START
 // ================================
 const PORT = process.env.PORT || 5500;
 if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () =>
-    console.log(`🚀 Server running on http://localhost:${PORT}`)
-  );
+  app.listen(PORT, () => console.log(`💻 Local Server running on http://localhost:${PORT}`));
 }
 
-// Export for Vercel
 module.exports = app;

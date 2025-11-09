@@ -303,3 +303,108 @@ body.light .form-select, body.light .dropdown-toggle {
   color: #000 !important;
   border: 1px solid rgba(0,0,0,0.1) !important;
 }
+/* ===== FIX: Chart Layout + Dropdown Theme ===== */
+
+/* Chart wrapper height lock so chart doesn't collapse */
+.chart-wrapper {
+  position: relative;
+  min-height: 420px;
+  width: 100%;
+}
+
+/* Chart canvas fully fill container */
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Perfect dropdown for dark mode */
+.dropdown-menu.show {
+  background: rgba(24, 24, 48, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  border-radius: 10px;
+  z-index: 9999 !important;
+}
+
+.dropdown-item {
+  color: #e5e7ff !important;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(102,126,234,0.3) !important;
+  color: #fff !important;
+}
+
+/* Light mode dropdowns */
+body.light .dropdown-menu.show {
+  background: rgba(255,255,255,0.98) !important;
+  border: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0 4px 25px rgba(0,0,0,0.2);
+}
+body.light .dropdown-item {
+  color: #0a155a !important;
+}
+body.light .dropdown-item:hover {
+  background: rgba(160,180,255,0.4) !important;
+  color: #000 !important;
+}
+/* ===== FINAL Dropdown Theme Fix (Vercel Safe) ===== */
+.dropdown-menu {
+  background-color: rgba(25, 25, 50, 0.97) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.4rem 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  z-index: 9999 !important;
+}
+
+.dropdown-item {
+  color: #e0e3ff !important;
+  background: transparent !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 6px !important;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: rgba(102, 126, 234, 0.35) !important;
+  color: #fff !important;
+}
+
+body.light .dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+body.light .dropdown-item {
+  color: #0a155a !important;
+}
+
+body.light .dropdown-item:hover {
+  background: rgba(160,180,255,0.4) !important;
+  color: #000 !important;
+}
+
+/* Fix for select elements (Bootstrap override) */
+.form-select,
+.dropdown-toggle {
+  background-color: rgba(255,255,255,0.1) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  border-radius: 8px !important;
+}
+body.light .form-select,
+body.light .dropdown-toggle {
+  background-color: rgba(255,255,255,0.96) !important;
+  color: #000 !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+}
