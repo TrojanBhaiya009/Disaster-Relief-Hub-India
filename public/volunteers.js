@@ -2,7 +2,10 @@
 const fadeEls = document.querySelectorAll(".fade-up");
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+    if (e.isIntersecting) {
+      e.target.classList.add("visible");
+      obs.unobserve(e.target);
+    }
   });
 }, { threshold: 0.2 });
 fadeEls.forEach(el => obs.observe(el));
@@ -58,10 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
       fullName: document.getElementById("fullName").value.trim(),
       email: document.getElementById("email").value.trim(),
       phone: document.getElementById("phone").value.trim(),
-      state: document.getElementById("state").value,
+      state: document.getElementById("state").value.trim(),
       city: document.getElementById("city").value.trim(),
-      skills: document.getElementById("skills").value,
-      availability: document.getElementById("availability").value,
+      skills: document.getElementById("skills").value.trim(),
+      availability: document.getElementById("availability").value.trim(),
       notes: document.getElementById("notes").value.trim(),
       consent: document.getElementById("consent").checked
     };
@@ -72,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       msg.textContent = "Please agree to be contacted.";
       return;
     }
+
     if (!data.fullName || !data.email || !data.phone || !data.state || !data.city || !data.skills || !data.availability) {
       msg.className = "mt-3 small error";
       msg.textContent = "Please fill all required fields.";
@@ -84,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
     msg.textContent = "Registered locally. Attempting to save to server…";
 
     // ===== BACKEND HOOK (Node + SQL) =====
-    // Fixed endpoint ✅
     try {
       const res = await fetch("http://localhost:5500/api/volunteer", {
         method: "POST",
@@ -93,11 +96,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const responseData = await res.json();
-      
+
       if (!res.ok) {
-        throw new Error(responseData.details || responseData.error || `Server responded with ${res.status}`);
+        throw new Error(responseData.error || `Server responded with ${res.status}`);
       }
-      
+
       msg.className = "mt-3 small success";
       msg.textContent = "Successfully registered on server ✅";
       form.reset();
