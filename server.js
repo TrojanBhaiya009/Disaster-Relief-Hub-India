@@ -1,37 +1,92 @@
 // ================================
-// Disaster Relief Hub - Unified Backend for Vercel
+// Disaster Relief Hub - Backend (Vercel Ready)
 // ================================
 
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const path = require("path");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
-
 const app = express();
 
-// Middleware
-app.use(cors());
+// ================================
+// Middleware Setup
+// ================================
+app.use(
+  cors({
+    origin: ["http://localhost:5500", "https://hack-ops-repo-lkbq.vercel.app"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); // serve frontend files
 
 // ================================
-// Database
+// Database Connection
 // ================================
-const db = mysql.createPool({
+const dbConfig = {
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "Nayan",
   password: process.env.DB_PASS || "Iamabadman#009",
   database: process.env.DB_NAME || "reliefhub",
   waitForConnections: true,
   connectionLimit: 10,
-});
+  queueLimit: 0,
+};
+
+const db = mysql.createPool(dbConfig);
 
 // ================================
-// Health Check
+// Initialize Database + Tables
+// ================================
+async function initializeDatabase() {
+  try {
+    const conn = await db.getConnection();
+
+    await conn.query(`CREATE DATABASE IF NOT EXISTS reliefhub`);
+    await conn.query(`USE reliefhub`);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS volunteers (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50) NOT NULL,
+        state VARCHAR(100),
+        city VARCHAR(100),
+        skills VARCHAR(255),
+        availability VARCHAR(100),
+        notes TEXT,
+        consent BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        subject VARCHAR(255),
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    conn.release();
+    console.log("✅ Database initialized and verified");
+  } catch (err) {
+    console.error("❌ Database initialization failed:", err.message);
+  }
+}
+initializeDatabase();
+
+// ================================
+// Health Check Route
 // ================================
 app.get("/api/health", async (req, res) => {
   try {
@@ -40,7 +95,9 @@ app.get("/api/health", async (req, res) => {
     conn.release();
     res.json({ status: "✅ API and Database Connected", time: new Date() });
   } catch (err) {
-    res.status(500).json({ error: "Database connection failed", details: err.message });
+    res
+      .status(500)
+      .json({ status: "❌ DB Connection Error", error: err.message });
   }
 });
 
@@ -48,56 +105,125 @@ app.get("/api/health", async (req, res) => {
 // Volunteer Registration
 // ================================
 app.post("/api/volunteer", async (req, res) => {
-  const { fullName, email, phone, state, city, skills, availability, notes, consent } = req.body;
+  const {
+    fullName,
+    email,
+    phone,
+    state,
+    city,
+    skills,
+    availability,
+    notes,
+    consent,
+  } = req.body;
 
-  if (!fullName || !email || !phone)
+  console.log("📩 Received volunteer data:", req.body);
+
+  if (!fullName || !email || !phone) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const sql = `
+    INSERT INTO volunteers 
+    (name, email, phone, state, city, skills, availability, notes, consent)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   try {
-    await db.query(
-      `INSERT INTO volunteers (name, email, phone, state, city, skills, availability, notes, consent)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [fullName, email, phone, state, city, skills, availability, notes, consent ? 1 : 0]
-    );
+    const [result] = await db.query(sql, [
+      fullName,
+      email,
+      phone,
+      state || "",
+      city || "",
+      skills || "",
+      availability || "",
+      notes || "",
+      consent ? 1 : 0,
+    ]);
+
+    console.log(`✅ Volunteer inserted with ID: ${result.insertId}`);
     res.json({ message: "Volunteer registered successfully!" });
   } catch (err) {
-    console.error("DB Error:", err.message);
-    res.status(500).json({ error: "Database insert failed", details: err.message });
+    console.error("❌ Database Insert Error:", err.sqlMessage || err.message);
+    res.status(500).json({
+      error: "Database insert failed",
+      details: err.sqlMessage || err.message,
+    });
   }
 });
 
 // ================================
-// Contact Form
+// Contact Form Endpoint
 // ================================
 app.post("/api/contact", async (req, res) => {
   const { name, email, subject, message } = req.body;
-  if (!name || !email || !message)
+
+  if (!name || !email || !message) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const sql = `
+    INSERT INTO contact_messages (name, email, subject, message)
+    VALUES (?, ?, ?, ?)
+  `;
 
   try {
-    await db.query(
-      `INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)`,
-      [name, email, subject, message]
+    const [result] = await db.query(sql, [name, email, subject, message]);
+    console.log(
+      `📩 Contact message received from ${name} (ID: ${result.insertId})`
     );
     res.json({ message: "Message stored successfully!" });
   } catch (err) {
-    res.status(500).json({ error: "Database insert failed", details: err.message });
+    console.error("❌ Contact Insert Error:", err.sqlMessage || err.message);
+    res.status(500).json({
+      error: "Database insert failed",
+      details: err.sqlMessage || err.message,
+    });
   }
 });
 
 // ================================
-// Serve Frontend (For Vercel)
+// Routes for Frontend Pages
+// ================================
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Redirect `/volunteer` and `/volunteers` correctly
+app.get(["/volunteer", "/volunteers"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "volunteers.html"));
+});
+
+// ================================
+// Serve All Frontend Pages (Wildcard for Vercel)
 // ================================
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ================================
-// Start Server (Local Dev only)
+// 404 & Error Handlers
 // ================================
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found", path: req.path });
+});
+
+app.use((err, req, res, next) => {
+  console.error("❌ Unhandled Error:", err);
+  res
+    .status(500)
+    .json({ error: "Internal server error", message: err.message });
+});
+
+// ================================
+// Start Server (Local)
+// ================================
+const PORT = process.env.PORT || 5500;
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5500;
-  app.listen(PORT, () => console.log(`🚀 Local server on http://localhost:${PORT}`));
+  app.listen(PORT, () =>
+    console.log(`🚀 Server running on http://localhost:${PORT}`)
+  );
 }
 
 // Export for Vercel
