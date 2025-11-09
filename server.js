@@ -1,5 +1,5 @@
 // ================================
-// Disaster Relief Hub - Backend
+// Disaster Relief Hub - Backend (Vercel Ready)
 // ================================
 
 const express = require("express");
@@ -16,11 +16,12 @@ const app = express();
 // Middleware Setup
 // ================================
 app.use(cors({
-  origin: "http://localhost:5500",
+  origin: ["http://localhost:5500", "https://hack-ops-repo-lkbq.vercel.app"],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public"))); // serve frontend files
 
 // ================================
 // Database Connection
@@ -75,7 +76,7 @@ async function initializeDatabase() {
     `);
 
     conn.release();
-    console.log("✅ Database initialized and tables verified");
+    console.log("✅ Database initialized and verified");
   } catch (err) {
     console.error("❌ Database initialization failed:", err.message);
   }
@@ -177,12 +178,15 @@ app.post("/api/contact", async (req, res) => {
 });
 
 // ================================
-// Static Files
+// Routes for Frontend Pages
 // ================================
-app.use(express.static(path.join(__dirname, "public")));
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Redirect `/volunteer` and `/volunteers` correctly
+app.get(["/volunteer", "/volunteers"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "volunteers.html"));
 });
 
 // ================================
@@ -198,9 +202,12 @@ app.use((err, req, res, next) => {
 });
 
 // ================================
-// Start Server
+// Start Server (Local)
 // ================================
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+}
+
+// Export for Vercel
+module.exports = app;
