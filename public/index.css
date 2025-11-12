@@ -430,17 +430,18 @@ body:not(.light) .dropdown-toggle {
   color: #fff !important;
   text-decoration: underline;
 }
-/* ===== MOBILE NAVBAR FIX FOR LIGHT MODE ===== */
+/* ===== MOBILE NAVBAR FIX WITH LIGHT BLUE MODE ===== */
 @media (max-width: 991px) {
   .navbar-collapse {
-    background: linear-gradient(180deg, #ffffff, #f4f6ff);
+    background: linear-gradient(180deg, #e6ecff 0%, #cfd9ff 100%);
     border-radius: 0 0 15px 15px;
     padding: 1rem 0.8rem;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    backdrop-filter: blur(6px);
   }
 
   .navbar-nav .nav-link {
-    color: #0a0a2a !important;
+    color: inherit !important; /* keep same text color */
     text-align: center;
     font-weight: 600;
     font-size: 1.1rem;
@@ -451,22 +452,35 @@ body:not(.light) .dropdown-toggle {
 
   .navbar-nav .nav-link:hover,
   .navbar-nav .nav-link.active {
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.08);
     color: #0036ff !important;
   }
 
-  /* Theme toggle button inside menu */
+  /* Theme toggle button (inside collapsed menu) */
   #modeToggle {
     display: block;
     margin: 0.9rem auto 0;
-    background: linear-gradient(135deg, #e8ebff, #cfd6ff);
-    border: 1px solid rgba(0,0,0,0.1);
-    color: #000;
+    background: linear-gradient(135deg, #d8e0ff, #bfcaff);
+    border: 1px solid rgba(0,0,0,0.15);
+    color: inherit;
     font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
   #modeToggle:hover {
-    background: #dfe3ff;
+    background: #cfd9ff;
     transform: scale(1.03);
   }
+}
+
+/* ===== DARK MODE NAVBAR (unchanged) ===== */
+body:not(.light) .navbar-collapse {
+  background: linear-gradient(180deg, #0b0b20 0%, #1c1c5c 100%);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+}
+
+body:not(.light) #modeToggle {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #ffffff;
 }
