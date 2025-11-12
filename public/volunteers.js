@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== BACKEND HOOK (Node + SQL) =====
     try {
-      const res = await fetch("http://localhost:5500/api/volunteer", {
+      const res = await fetch("/api/volunteer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
