@@ -1,7 +1,7 @@
 {
   "name": "hack-ops-repo",
   "version": "1.0.0",
-  "description": "Disaster Relief Hub India - Fullstack Hackathon Project",
+  "description": "Disaster Relief Hub India - Fullstack Project",
   "main": "server.js",
   "keywords": [
     "nodejs",

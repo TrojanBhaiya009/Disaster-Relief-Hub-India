@@ -42,8 +42,8 @@ It helps reduce response time, visualize real-time data, and ensure faster commu
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/<your-username>/HackOps-Repo.git
-cd HackOps-Repo 
+git clone https://github.com/<TrojanBhaiya009>/Disaster-Relief-Hub-India.git
+cd Disaster-Relief-Hub-India-Repo 
 Install dependencies
 npm install
 
@@ -109,7 +109,7 @@ Database: MySQL (local or cloud instance)
 
 📽️ Demo Video
 
-🎥 Coming soon! (or attach your YouTube link here)
+🎥 Coming soon! 
 
 💡 Future Enhancements
 
@@ -124,11 +124,6 @@ SMS/email alert system for critical updates
 👥 Contributors
 
 [Nayansh Jain] – Developer & Designer
-[Ayan Raja] - Developer & Designer
-[Anushka Mathur] - Backend Developer
-[Anukarsh pandey] - Backend Developer
-
-Team: HackOps
 
 🏁 Conclusion
 

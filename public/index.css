@@ -408,3 +408,17 @@ body.light .dropdown-toggle {
   color: #000 !important;
   border: 1px solid rgba(0,0,0,0.15) !important;
 }
+/* ===== FIX: Dropdown Text Color for Dark Mode ===== */
+/* Change dropdown toggle and select text to black in dark mode for visibility on light background */
+body:not(.light) .form-select,
+body:not(.light) .dropdown-toggle {
+  color: #000000 !important;
+}
+
+/* ===== FIX: Reduce Graph Size ===== */
+/* Reduce chart wrapper height to around 330px */
+.chart-wrapper {
+  position: relative;
+  min-height: 330px;  /* Changed from 420px to 330px */
+  width: 100%;
+}
