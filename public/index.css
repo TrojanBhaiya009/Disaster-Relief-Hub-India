@@ -590,3 +590,58 @@ body.light .navbar-collapse {
   transform: scale(1.05);
   opacity: 0.85;
 }
+/* ===== LIGHT + DARK MODE NAVBAR FIX ===== */
+
+/* Common link styles */
+.navbar-nav .nav-link {
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+/* LIGHT MODE */
+body.light .navbar {
+  background: linear-gradient(90deg, #dfe6ff 0%, #cfd9ff 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.light .navbar .nav-link,
+body.light .navbar-collapse .nav-link {
+  color: #000000 !important;       /* black text */
+}
+
+/* DARK MODE */
+body:not(.light) .navbar {
+  background: linear-gradient(90deg, #0b0b20, #1c1c5c);
+  box-shadow: 0 0 20px rgba(102,126,234,0.4);
+}
+
+body:not(.light) .navbar .nav-link,
+body:not(.light) .navbar-collapse .nav-link {
+  color: #ffffff !important;       /* white text */
+}
+
+/* Hover / Active Links */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #00b3ff !important;
+  text-decoration: underline;
+}
+
+/* Mobile dropdown */
+.navbar-collapse {
+  border-radius: 0 0 15px 15px;
+  padding: 1rem 0.8rem;
+  backdrop-filter: blur(6px);
+  transition: background 0.3s ease;
+}
+
+/* Light Mode Dropdown Background */
+body.light .navbar-collapse {
+  background: linear-gradient(180deg, #e6ecff 0%, #cfd9ff 100%);
+}
+
+/* Dark Mode Dropdown Background */
+body:not(.light) .navbar-collapse {
+  background: linear-gradient(180deg, #0b0b20 0%, #1c1c5c 100%);
+}
