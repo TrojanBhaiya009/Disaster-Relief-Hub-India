@@ -484,3 +484,39 @@ body:not(.light) #modeToggle {
   border: 1px solid rgba(255,255,255,0.2);
   color: #ffffff;
 }
+/* ===== DESKTOP NAVBAR FIX (TEXT BLACK + LIGHT BLUE MODE) ===== */
+@media (min-width: 992px) {
+
+  /* Common navbar link styling */
+  .navbar-nav .nav-link {
+    color: #000000 !important;        /* black text always */
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link.active {
+    color: #0036ff !important;        /* blue on hover/active */
+    text-decoration: underline;
+  }
+
+  /* Dark Mode Navbar (same theme as before) */
+  body:not(.light) .navbar {
+    background: linear-gradient(90deg, #0b0b20, #1c1c5c);
+    box-shadow: 0 0 20px rgba(102,126,234,0.4);
+  }
+
+  /* Light Mode Navbar (new bluish gradient) */
+  body.light .navbar {
+    background: linear-gradient(90deg, #dfe6ff 0%, #cfd9ff 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Remove collapse background on desktop */
+  .navbar-collapse {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
