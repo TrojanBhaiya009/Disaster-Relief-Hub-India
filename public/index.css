@@ -520,3 +520,73 @@ body:not(.light) #modeToggle {
     padding: 0 !important;
   }
 }
+/* ===== UNIVERSAL NAVBAR TEXT FIX (DARK = WHITE | LIGHT = BLACK) ===== */
+
+/* Common Navbar Link Base */
+.navbar-nav .nav-link {
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+/* Desktop + Mobile Text Color Rules */
+body:not(.light) .navbar .nav-link,
+body:not(.light) .navbar-collapse .nav-link {
+  color: #ffffff !important;        /* Dark mode = white text */
+}
+
+body.light .navbar .nav-link,
+body.light .navbar-collapse .nav-link {
+  color: #000000 !important;        /* Light mode = black text */
+}
+
+/* Hover & Active Effects (both modes) */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #00b3ff !important;
+  text-decoration: underline;
+}
+
+/* ===== NAVBAR BACKGROUNDS ===== */
+
+/* Dark Mode Navbar Background */
+body:not(.light) .navbar {
+  background: linear-gradient(90deg, #0b0b20, #1c1c5c);
+  box-shadow: 0 0 20px rgba(102,126,234,0.4);
+}
+
+/* Light Mode Navbar Background */
+body.light .navbar {
+  background: linear-gradient(90deg, #dfe6ff 0%, #cfd9ff 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile Collapsed Menu */
+.navbar-collapse {
+  border-radius: 0 0 15px 15px;
+  padding: 1rem 0.8rem;
+  backdrop-filter: blur(6px);
+  transition: background 0.3s ease;
+}
+
+/* Backgrounds for mobile menu */
+body:not(.light) .navbar-collapse {
+  background: linear-gradient(180deg, #0b0b20 0%, #1c1c5c 100%);
+}
+
+body.light .navbar-collapse {
+  background: linear-gradient(180deg, #e6ecff 0%, #cfd9ff 100%);
+}
+
+/* Keep toggle button visible */
+#modeToggle {
+  color: inherit;
+  font-weight: 600;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+  transition: 0.3s;
+}
+#modeToggle:hover {
+  transform: scale(1.05);
+  opacity: 0.85;
+}
